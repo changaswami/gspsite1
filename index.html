@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Shoe Party - Building the Alternative</title>
+    <!-- Favicon -->
+    <link rel="icon" href="https://content-fetcher.sandbox.google.com/files/Favicon.png-db4198d1-fe54-4a5f-9d9e-78e3f834cb1c" type="image/png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc; /* Light gray background */
+            color: #2d3748; /* Dark gray text */
+        }
+        /* Custom scroll behavior for smooth transitions */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Hide all page sections by default, show only the active one via JS */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            min-height: 100vh; /* Ensure sections take full height for smooth scrolling */
+            padding-top: 8rem; /* Increased space for fixed header and uniform spacing */
+            flex-direction: column; /* Ensure content stacks vertically */
+            justify-content: flex-start; /* Start content from the top */
+            align-items: center; /* Center content horizontally */
+        }
+        .page-section.active {
+            display: flex; /* Flexbox for centering content */
+            opacity: 1;
+        }
+        /* Custom button style for primary CTAs */
+        .btn-primary {
+            @apply bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-xl transform hover:scale-105;
+        }
+        /* Custom button style for secondary CTAs */
+        .btn-secondary {
+            @apply bg-transparent border-2 border-blue-600 text-blue-600 font-semibold py-3 px-8 rounded-full transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white transform hover:scale-105;
+        }
+        /* Sticky header default style */
+        #main-header {
+            background-color: white; /* Opaque white background */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+        /* Focus styles for accessibility */
+        *:focus {
+            outline: 2px solid #3182ce; /* Blue outline */
+            outline-offset: 2px;
+        }
+        /* Simple SVG glyph icon styles */
+        .glyph-icon {
+            width: 28px; /* Slightly smaller for inline text */
+            height: 28px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+            color: #4299e1; /* Blue color */
+        }
+        /* FAQ accordion styling */
+        .accordion-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem; /* rounded-xl equivalent */
+            margin-bottom: 1rem; /* Space between items */
+            overflow: hidden;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md equivalent */
+        }
+        .accordion-header {
+            @apply flex justify-between items-center w-full py-4 px-6 text-left font-semibold text-xl cursor-pointer hover:text-blue-600 transition-colors duration-200;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            @apply px-6 pb-4 text-gray-700;
+        }
+        .accordion-content.open {
+            max-height: 500px; /* Adjust based on max content height */
+        }
+        .arrow {
+            transition: transform 0.3s ease-out;
+        }
+        .arrow.rotate {
+            transform: rotate(180deg);
+        }
+
+        /* Keyframes for animations */
+        @keyframes hero-gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Apply animations */
+        #home {
+            background: linear-gradient(135deg, #e0f2fe, #bfdbfe, #c7d2fe); /* Light blue to indigo gradient */
+            background-size: 200% 200%;
+            animation: hero-gradient-move 15s ease infinite;
+        }
+
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+
+        /* Highlighted text style */
+        .highlighted-text {
+            @apply text-blue-600 font-semibold hover:underline;
+        }
+
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            display: none; /* Hidden by default */
+            transition: max-height 0.3s ease-in-out;
+            overflow: hidden;
+            max-height: 0; /* For collapse animation */
+        }
+        #mobile-menu.active {
+            display: block; /* Shown when active */
+            max-height: 300px; /* Adjust based on actual menu height */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Sticky Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 bg-white shadow-md transition-all duration-300 ease-in-out py-4 px-6 md:px-12 lg:px-24">
+        <nav class="flex justify-between items-center relative">
+            <a href="#home" class="text-2xl font-extrabold text-blue-800 tracking-tight logo-link" onclick="navigate('home')">Global Shoe Party</a>
+
+            <!-- Hamburger menu icon for mobile -->
+            <button id="hamburger-menu" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#movement" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('movement')">Our Movement</a></li>
+                <li><a href="#ecosystem" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('ecosystem')">The Ecosystem</a></li>
+                <li><a href="#mission" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('mission')">Our Mission</a></li>
+                <li><a href="#join-us" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('join-us')">Join Us</a></li>
+            </ul>
+
+            <!-- Mobile Collapsible Menu -->
+            <ul id="mobile-menu" class="absolute top-full left-0 w-full bg-white shadow-md py-4 md:hidden flex flex-col space-y-4 items-center">
+                <li><a href="#movement" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('movement')">Our Movement</a></li>
+                <li><a href="#ecosystem" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('ecosystem')">The Ecosystem</a></li>
+                <li><a href="#mission" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('mission')">Our Mission</a></li>
+                <li><a href="#join-us" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('join-us')">Join Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Sections -->
+    <main>
+        <!-- 1. Homepage -->
+        <section id="home" class="page-section active flex-col justify-center items-center text-center px-4 py-24 relative overflow-hidden">
+            <div class="relative z-10 max-w-4xl mx-auto py-12">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-blue-900 leading-tight mb-6 animate-fade-in-up">
+                    The System is Broken.<br>We Are Building the Alternative.
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl mx-auto animate-fade-in-up delay-100">
+                    A global, decentralized movement empowering individuals to collectively solve the world's most pressing problems.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
+                    <a href="#movement" class="btn-primary" onclick="navigate('movement')">Explore the Movement</a>
+                    <a href="#join-us" class="btn-secondary" onclick="navigate('join-us')">Become a Citizen</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Our Movement -->
+        <section id="movement" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    A New Layer of Governance.<br>Built by the People, for the Planet.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    The Global Shoe Party is not here to reform the old world. We are here to build a new layer on top of it, creating a parallel system of governance.
+                </p>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-20"> <!-- Consolidated to single column and added spacing -->
+                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                        <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg>
+                        The System is Broken: A Deep Dive
+                    </h3>
+                    <p>The institutions of the 20th century are failing us. Nation-states bicker over borders while the planet burns. The United Nations passes resolutions but has no power to enforce them. We are governed by systems that are too slow, too centralized, and too disconnected from the real, lived experience of the global citizenry.</p>
+                    <p>We are told to trust the process. But the process is broken. We are told to vote. But our vote feels meaningless against the inertia of a global bureaucracy. Waiting for the system to fix itself is a fantasy.</p>
+                </div>
+
+                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                        <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                        The Movement: A New Layer of Governance
+                    </h3>
+                    <p>The Global Shoe Party is a global, decentralized political movement. Our goal is to create a parallel system of governance that allows individuals, regardless of their nationality, to collectively make decisions and solve problems at a global scale, without the permission of existing institutions.</p>
+                    <p>When you join our ecosystem, you are not just a user. You are a citizen of a new, digital nation. You are empowered to make a real difference, contributing to solutions that transcend outdated borders and bureaucracies.</p>
+                </div>
+            </div>
+
+            <div class="mt-20 max-w-4xl mx-auto text-center">
+                <h3 class="text-3xl font-bold text-blue-700 mb-8">Our Core Principles</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm transform hover:-translate-y-2 transition-transform duration-300">
+                        <h4 class="font-bold text-xl mb-2 text-blue-800">Radical Transparency</h4>
+                        <p class="text-gray-700 text-base">All actions and decisions are verifiable and open for scrutiny.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm transform hover:-translate-y-2 transition-transform duration-300">
+                        <h4 class="font-bold text-xl mb-2 text-blue-800">Equitable Participation</h4>
+                        <p class="text-gray-700 text-base">Power is earned through contribution, not wealth.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm transform hover:-translate-y-2 transition-transform duration-300">
+                        <h4 class="font-bold text-xl mb-2 text-blue-800">Verifiable Impact</h4>
+                        <p class="text-gray-700 text-base">Our success is measured by real-world, tangible change.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm transform hover:-translate-y-2 transition-transform duration-300">
+                        <h4 class="font-bold text-xl mb-2 text-blue-800">Self-Reflection</h4>
+                        <p class="text-gray-700 text-base">We provoke deeper understanding of individual and collective purpose.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm transform hover:-translate-y-2 transition-transform duration-300">
+                        <h4 class="font-bold text-xl mb-2 text-blue-800">Decentralized Decision-Making</h4>
+                        <p class="text-gray-700 text-base">Collective will guides our actions, free from centralized control.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <!-- Sequential Navigation Link -->
+                    <a href="#ecosystem" class="btn-secondary" onclick="navigate('ecosystem')"><span class="highlighted-text">Continue to The Ecosystem</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. The Ecosystem -->
+        <section id="ecosystem" class="page-section flex-col justify-center items-center bg-gradient-to-br from-indigo-50 to-blue-50 py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    Empowering You:<br>The Tools for a New Governance.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    Our ecosystem provides the foundational tools for this new form of governance, designed to translate real-world action into meaningful influence.
+                </p>
+            </div>
+
+            <!-- The Shoe -->
+            <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
+                <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                    <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><polyline points="10 10 12 12 14 10"></polyline></svg>
+                    The Shoe: Your Proof of Stake in Reality.
+                </h3>
+                <p>More than just a wearable, "The Shoe" is a political tool. It verifies your real-world, pro-social actions—from organizing a local clean-up to participating in a global protest—and translates them into undeniable political capital.</p>
+                <p>Utilizing on-device AI, it captures context and verifies contributions, ensuring that your tangible efforts are recognized and recorded as true value.</p>
+            </div>
+
+            <!-- The Step Token -->
+            <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
+                <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                    <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+                    The Step Token: Your Voice.
+                </h3>
+                <p>This is not a currency for buying goods. The Step Token is a governance token for making decisions. The more you contribute to the collective good, the more voting power you earn.</p>
+                <p>It's a system designed to give power to the active, the engaged, and the constructive, ensuring that influence aligns with genuine contribution, not just inherited wealth or existing power structures.</p>
+            </div>
+
+            <!-- The March -->
+            <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
+                <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                    <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 19H7A5 5 0 0 1 2 14V10a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v4a5 5 0 0 1-5 5z"></path><circle cx="9" cy="12" r="2"></circle><circle cx="15" cy="12" r="2"></circle></svg>
+                    The March: Our Assembly.
+                </h3>
+                <p>No longer just a personal journey, "The March" is our decentralized public square. It's where we debate issues, propose solutions, and vote on actions.</p>
+                <p>It is where we coordinate our collective will, ensuring that every citizen has a platform to contribute to global problem-solving and collective decision-making.</p>
+                </div>
+
+            <!-- Underlying Technology (Optional, Concise) -->
+            <div class="mt-16 text-center max-w-3xl mx-auto">
+                <h3 class="text-2xl font-bold text-blue-700 mb-6">Underlying Technology: The Engine of Change</h3>
+                <p class="text-lg text-gray-700 mb-8">
+                    Our system is powered by cutting-edge Generative AI (like Gemini) for deep contextual understanding and secure, decentralized blockchain technology (EVM-compatible Layer 2 networks) for transparent and immutable record-keeping. This blend ensures both intelligence and integrity.
+                </p>
+                <!-- Sequential Navigation Link -->
+                <a href="#mission" class="btn-primary" onclick="navigate('mission')"><span class="highlighted-text">Continue to Our Mission</span></a>
+            </div>
+        </section>
+
+        <!-- 4. Our Mission -->
+        <section id="mission" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    Impact Over Inertia:<br>Our First Objective.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    We are committed to proving our model works through tangible, real-world impact. Our first objective is a testament to this commitment.
+                </p>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-20"> <!-- Consolidated to single column and added spacing -->
+                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                        <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"></path><path d="M2.69 12a8 8 0 1 1 5.66-5.66"></path><path d="M12 12l-6 6l6 6l6-6z"></path></svg>
+                        The Global Problem: Plastic in Our Oceans
+                    </h3>
+                    <p>A pressing issue that transcends borders, the pervasive problem of plastic pollution in our oceans demands immediate and coordinated action. The UN has struggled to enforce global solutions, leaving a critical gap that GSP aims to fill.</p>
+                    <p>We will identify this specific global challenge as our initial proving ground, demonstrating the power of a decentralized, collective effort.</p>
+                </div>
+
+                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">
+                        <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                        Our Coordinated Effort: Global Action
+                    </h3>
+                    <p>Through "The Shoe" sensing real-world contributions, "The Step Token" empowering collective decisions, and "The March" providing a platform for coordination, we will mobilize a global network of citizens.</p>
+                    <p>This decentralized approach allows for rapid, distributed action, directly addressing the inertia of centralized bureaucracies and enabling tangible, widespread impact.</p>
+                </div>
+            </div>
+
+            <div class="mt-20 max-w-4xl mx-auto text-center">
+                <h3 class="text-3xl font-bold text-blue-700 mb-8">Measuring Success: Tangible Impact</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div class="bg-green-50 p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-green-800">Verified Contributions</h4>
+                        <p class="text-gray-700 text-base">Tracking every pro-social action captured by "The Shoe."</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-green-800">Real-World Change</h4>
+                        <p class="text-gray-700 text-base">Quantifying metrics like tons of plastic removed, community engagement levels.</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg shadow-sm">
+                        <h4 class="font-bold text-xl mb-2 text-green-800">Decentralized Decisions</h4>
+                        <p class="text-gray-700 text-base">Monitoring collective consensus and implementation of solutions through "The March."</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="#join-us" class="btn-primary" onclick="navigate('join-us')">Continue to Join Us</a>
+            </div>
+        </section>
+
+        <!-- 5. Join Us -->
+        <section id="join-us" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    Be the Change.<br>Become a Citizen of a New Nation.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    Your unique skills and passion are crucial to building this alternative future. Discover how you can contribute.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <!-- SVG Icon for Citizen -->
+                    <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-blue-700 mb-4">For Participants / Citizens</h3>
+                    <p class="text-gray-700 text-lg mb-6">Shape Your Story, Earn Your Voice. Learn how to get "The Shoe," engage with "The March," make contributions, and earn "Step Tokens."</p>
+                    <a href="#get-involved-citizens" class="btn-secondary text-sm px-6 py-2" onclick="navigate('get-involved-citizens')">Get Started</a>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <!-- SVG Icon for Technologist -->
+                    <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-blue-700 mb-4">For Technologists</h3>
+                    <p class="text-gray-700 text-lg mb-6">Build the Future with Us. We seek expertise in Hardware, AI/Backend, Blockchain, and Frontend development to scale our vision.</p>
+                    <a href="#get-involved-technologists" class="btn-secondary text-sm px-6 py-2" onclick="navigate('get-involved-technologists')">View Open Roles</a>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <!-- SVG Icon for Community Leader -->
+                    <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-blue-700 mb-4">For Advocates / Community Leaders</h3>
+                    <p class="text-gray-700 text-lg mb-6">Mobilize the Movement. Help spread our vision, organize local initiatives, and foster GSP's values in communities worldwide.</p>
+                    <a href="#get-involved-advocates" class="btn-secondary text-sm px-6 py-2" onclick="navigate('get-involved-advocates')">Connect Now</a>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="max-w-4xl mx-auto w-full mb-20">
+                <h3 class="text-3xl font-bold text-blue-700 text-center mb-8">Frequently Asked Questions</h3>
+                <div id="faq-accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false" aria-controls="faq-content-1">
+                            What is the Global Shoe Party's core mission?
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="accordion-content" id="faq-content-1">
+                            <p>Our core mission is to build a new medium designed to value human perspective and contribution, creating a decentralized ecosystem that recognizes and rewards real-world actions currently invisible to traditional economic systems.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false" aria-controls="faq-content-2">
+                            How does "The Shoe" work to verify contributions?
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="accordion-content" id="faq-content-2">
+                            <p>"The Shoe" is a proprietary wearable device that uses on-device AI to sense and verify real-world, pro-social actions. It captures context and translates these actions into verifiable data that informs political capital and token rewards.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false" aria-controls="faq-content-3">
+                            Is the Step Token a cryptocurrency for trading?
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="accordion-content" id="faq-content-3">
+                            <p>No, the Step Token is primarily a governance token. It is designed to be your voice in the ecosystem, granting voting power and influence based on your contributions to the collective good, rather than a speculative asset for buying goods.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" aria-expanded="false" aria-controls="faq-content-4">
+                            How can I contribute if I'm not a technologist?
+                            <span class="arrow">▼</span>
+                        </button>
+                        <div class="accordion-content" id="faq-content-4">
+                            <p>There are many ways to contribute! You can join as a citizen, participate in "The March," engage in community discussions, and advocate for our mission. We believe every form of valuable contribution will be recognized and rewarded.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Hub & Contact Form -->
+            <div class="max-w-4xl mx-auto w-full text-center">
+                <h3 class="text-3xl font-bold text-blue-700 mb-8">Connect with Our Community</h3>
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="https://www.linkedin.com/company/globalshoeparty" class="text-gray-700 hover:text-blue-600 transition-colors duration-200" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a href="https://www.instagram.com/globalshoeparty/" class="text-gray-700 hover:text-blue-600 transition-colors duration-200" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://t.me/globalshoeparty" class="text-gray-700 hover:text-blue-600 transition-colors duration-200" target="_blank" rel="noopener noreferrer">Telegram</a>
+                </div>
+                <p class="text-lg text-gray-700 mb-6">Have specific questions? Reach out to us.</p>
+                <form id="contact-form" class="bg-white p-8 rounded-xl shadow-lg max-w-lg mx-auto space-y-6">
+                    <div>
+                        <label for="name" class="block text-left text-gray-700 font-medium mb-2">Name</label>
+                        <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-left text-gray-700 font-medium mb-2">Email</label>
+                        <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="your.email@example.com">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-left text-gray-700 font-medium mb-2">Message</label>
+                        <textarea id="message" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="How can we help you?"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary w-full">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- New: Get Involved - Citizens Detail Page -->
+        <section id="get-involved-citizens" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    For Participants / Citizens:<br>Shape Your Story, Earn Your Voice.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    Your active participation is the lifeblood of our new governance. Here's how you can embark on your journey as a GSP Citizen.
+                </p>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
+                <div class="space-y-8 text-lg text-gray-700">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">Your Journey Starts Here</h3>
+                    <p>Becoming a citizen of the Global Shoe Party means actively contributing to a better world and gaining influence in a truly decentralized system.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">1. Get "The Shoe"</h4>
+                        <p>Learn about our proprietary wearable device, your personal ledger of human value. "The Shoe" senses your real-world contributions and connects them to our ecosystem.</p>
+                        <a href="#ecosystem" class="text-blue-600 hover:underline" onclick="navigate('ecosystem')">Discover The Shoe</a>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">2. Engage with "The March"</h4>
+                        <p>"The March" is your platform for collective action and self-reflection. Participate in discussions, propose solutions, and vote on initiatives that drive real-world change.</p>
+                        <a href="#ecosystem" class="text-blue-600 hover:underline" onclick="navigate('ecosystem')">Explore The March</a>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">3. Earn Step Tokens</h4>
+                        <p>Your verified contributions are rewarded with Step Tokens, our governance currency. These tokens represent your voice and grant you voting power in the GSP ecosystem.</p>
+                        <a href="#ecosystem" class="text-blue-600 hover:underline" onclick="navigate('ecosystem')">Understand Step Tokens</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="#join-us" class="btn-secondary" onclick="navigate('join-us')">← Back to Join Us</a>
+            </div>
+        </section>
+
+        <!-- New: Get Involved - Technologists Detail Page -->
+        <section id="get-involved-technologists" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    For Technologists:<br>Build the Future with Us.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    We are building a cutting-edge ecosystem and need brilliant minds across various disciplines to bring our vision to life.
+                </p>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
+                <div class="space-y-8 text-lg text-gray-700">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">Roles & Expertise We Seek</h3>
+                    <p>If you're passionate about decentralized systems, AI, hardware, and creating tangible impact, explore the opportunities below:</p>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Hardware & Embedded Systems Engineers</h4>
+                        <p>Design and build "The Shoe" and other sensing devices. Expertise in microcontrollers (Arduino, Raspberry Pi), BLE, IMU/GPS, and edge AI deployment (VAD, STT, Acoustic Scene Recognition).</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">AI & Backend Developers</h4>
+                        <p>Develop and optimize the multi-stage AI pipeline (Observer, Assessor, Storyteller) using Gemini. Experience with serverless functions (Firebase Cloud Functions) and secure API integrations.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Blockchain & Smart Contract Developers</h4>
+                        <p>Write, deploy, and audit Solidity smart contracts (ERC-20 tokens, Minter, Oracle, Utility contracts) on EVM-compatible L2s. Knowledge of Web3 libraries (ethers.js) and cryptographic signing.</p>
+                    </div>
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Frontend & App Developers</h4>
+                        <p>Craft intuitive and engaging web and mobile interfaces that interact seamlessly with our AI backend and blockchain components. Experience with React, modern web frameworks, and UI/UX principles.</p>
+                    </div>
+                    <p class="text-base text-gray-600 italic">Don't see your specific role? Reach out anyway! We're always looking for exceptional talent.</p>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="#join-us" class="btn-secondary" onclick="navigate('join-us')">← Back to Join Us</a>
+            </div>
+        </section>
+
+        <!-- New: Get Involved - Advocates Detail Page -->
+        <section id="get-involved-advocates" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
+            <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+                    For Advocates / Community Leaders:<br>Mobilize the Movement.
+                </h2>
+                <p class="text-xl text-gray-700">
+                    Your voice and leadership are vital to spreading the GSP vision and fostering communities of change worldwide.
+                </p>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
+                <div class="space-y-8 text-lg text-gray-700">
+                    <h3 class="text-3xl font-bold text-blue-700 mb-4">Your Role in Amplifying GSP</h3>
+                    <p>As an advocate or community leader, you play a direct role in educating, inspiring, and organizing individuals to become active citizens of the new digital nation.</p>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Spread the Vision</h4>
+                        <p>Share the GSP manifesto and our core principles within your networks. Help people understand how their individual contributions can reshape global governance.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Organize Local Initiatives</h4>
+                        <p>Lead community efforts that align with GSP's objectives, such as environmental cleanups or civic engagement projects. Your leadership can bring tangible impact to your local area.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
+                        <h4 class="font-bold text-xl text-blue-800">Foster Debate & Collaboration</h4>
+                        <p>Utilize "The March" as a platform to facilitate constructive discussions, propose solutions, and coordinate collective actions within your community and globally.</p>
+                    </div>
+                    <p class="text-base text-gray-600 italic">We provide resources and support to help you succeed in your advocacy efforts.</p>
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <a href="#join-us" class="btn-secondary" onclick="navigate('join-us')">← Back to Join Us</a>
+            </div>
+        </section>
+
+        <!-- New Page: Privacy Policy -->
+        <section id="privacy-policy" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24 text-left">
+            <div class="max-w-4xl mx-auto py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8 text-center">Privacy Policy</h2>
+                <p class="mb-4 text-gray-700">Last updated: June 21, 2025</p>
+                <p class="mb-6 text-gray-700">The Global Shoe Party operates the globalshoeparty.org website, which provides the SERVICE. This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Information Collection and Use</h3>
+                <p class="mb-4 text-gray-700">For a better experience while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to your name, phone number, and postal address. The information that we collect will be retained by us and used as described in this privacy policy.</p>
+                <p class="mb-6 text-gray-700">The app does use third-party services that may collect information used to identify you.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Log Data</h3>
+                <p class="mb-6 text-gray-700">We want to inform you that whenever you use our Service, in a case of an error in the app, we collect data and information (through third-party products) on your phone called Log Data. This Log Data may include information such as your device Internet Protocol (“IP”) address, device name, operating system version, the configuration of the app when utilizing our Service, the time and date of your use of the Service, and other statistics.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Cookies</h3>
+                <p class="mb-6 text-gray-700">Cookies are files with small amount of data that is commonly used an anonymous unique identifier. These are sent to your browser from the websites that you visit and are stored on your device's internal memory. This Service does not use these “cookies” explicitly. However, the app may use third party code and libraries that use “cookies” to collect information and to improve their services.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Service Providers</h3>
+                <p class="mb-4 text-gray-700">We may employ third-party companies and individuals due to the following reasons:</p>
+                <ul class="list-disc list-inside mb-6 text-gray-700 space-y-2">
+                    <li>To facilitate our Service;</li>
+                    <li>To provide the Service on our behalf;</li>
+                    <li>To perform Service-related services; or</li>
+                    <li>To assist us in analyzing how our Service is used.</li>
+                </ul>
+                <p class="mb-6 text-gray-700">We want to inform our Service users that these third parties have access to your Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Security</h3>
+                <p class="mb-6 text-gray-700">We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Links to Other Sites</h3>
+                <p class="mb-6 text-gray-700">Our Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by us. Therefore, we strongly advise you to review the Privacy Policy of these websites. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Children’s Privacy</h3>
+                <p class="mb-6 text-gray-700">Our Services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. In the case we discover that a child under 13 has provided us with personal information, we immediately delete this from our servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so that we will be able to do necessary actions.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Changes to This Privacy Policy</h3>
+                <p class="mb-6 text-gray-700">We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately after they are posted on this page.</p>
+
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Contact Us</h3>
+                <p class="mb-6 text-gray-700">If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at <a href="mailto:mail@globalshoeparty.org" class="text-blue-600 hover:underline">mail@globalshoeparty.org</a>.</p>
+            </div>
+            <div class="mt-10 text-center">
+                <a href="#home" class="btn-secondary" onclick="navigate('home')">← Back to Home</a>
+            </div>
+        </section>
+
+        <!-- New Page: Terms of Service -->
+        <section id="terms-of-service" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24 text-left">
+            <div class="max-w-4xl mx-auto py-8">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8 text-center">Terms of Service</h2>
+                <p class="mb-4 text-gray-700">Last updated: June 21, 2025</p>
+                <p class="mb-6 text-gray-700">Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the globalshoeparty.org website (the "Service") operated by Global Shoe Party ("us", "we", or "our"). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>
+                <p class="mb-6 text-gray-700">By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Accounts</h3>
+                <p class="mb-6 text-gray-700">When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
+                <p class="mb-6 text-gray-700">You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service. You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Intellectual Property</h3>
+                <p class="mb-6 text-gray-700">The Service and its original content, features and functionality are and will remain the exclusive property of Global Shoe Party and its licensors. The Service is protected by copyright, trademark, and other laws of both the [Your Country] and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Global Shoe Party.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Links To Other Web Sites</h3>
+                <p class="mb-6 text-gray-700">Our Service may contain links to third-party web sites or services that are not owned or controlled by Global Shoe Party. Global Shoe Party has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that Global Shoe Party shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>
+                <p class="mb-6 text-gray-700">We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services that you visit.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Termination</h3>
+                <p class="mb-6 text-gray-700">We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+                <p class="mb-6 text-gray-700">Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Disclaimer</h3>
+                <p class="mb-6 text-gray-700">Your use of the Service is at your sole risk. The Service is provided on an "AS IS" and "AS AVAILABLE" basis. The Service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement or course of performance.</p>
+                <p class="mb-6 text-gray-700">Global Shoe Party its subsidiaries, affiliates, and its licensors do not warrant that a) the Service will function uninterrupted, secure or available at any particular time or location; b) any errors or defects will be corrected; c) the Service is free of viruses or other harmful components; or d) the results of using the Service will meet your requirements.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Governing Law</h3>
+                <p class="mb-6 text-gray-700">These Terms shall be governed and construed in accordance with the laws of [Your Country], without regard to its conflict of law provisions.</p>
+                <p class="mb-6 text-gray-700">Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Changes</h3>
+                <p class="mb-6 text-gray-700">We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+                <p class="mb-6 text-gray-700">By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>
+
+                <h3 class="2xl font-bold text-blue-700 mb-4">Contact Us</h3>
+                <p class="mb-6 text-gray-700">If you have any questions about these Terms, please contact us at <a href="mailto:mail@globalshoeparty.org" class="text-blue-600 hover:underline">mail@globalshoeparty.org</a>.</p>
+            </div>
+            <div class="mt-10 text-center">
+                <a href="#home" class="btn-secondary" onclick="navigate('home')">← Back to Home</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6 md:px-12 lg:px-24 text-center">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-2xl font-extrabold mb-4">Global Shoe Party</h3>
+            <p class="text-gray-400 mb-6">Email: <a href="mailto:mail@globalshoeparty.org" class="text-blue-400 hover:underline">mail@globalshoeparty.org</a></p>
+            <p class="text-gray-400 mb-6">&copy; 2025 Global Shoe Party. All rights reserved. Building the alternative.</p>
+            <div class="flex justify-center space-x-6 text-gray-400">
+                <a href="#privacy-policy" class="hover:text-white transition-colors duration-200" onclick="navigate('privacy-policy')">Privacy Policy</a>
+                <a href="#terms-of-service" class="hover:text-white transition-colors duration-200" onclick="navigate('terms-of-service')">Terms of Service</a>
+                <a href="#join-us" class="hover:text-white transition-colors duration-200" onclick="navigate('join-us', 'contact-form')">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for SPA-like navigation and header effects
+        const pageSections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('nav a');
+        const mainHeader = document.getElementById('main-header');
+        const hamburgerMenu = document.getElementById('hamburger-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Dynamically create style for `min-height: calc(100vh - header_height)` for page-section
+        function updatePageSectionPadding() {
+            const headerHeight = mainHeader.offsetHeight;
+            pageSections.forEach(section => {
+                section.style.paddingTop = `${headerHeight + 32}px`; // Add some extra buffer
+            });
+        }
+
+        // The main navigation function
+        function navigate(pageId, scrollToElementId = null) {
+            // Update URL hash without causing a full page reload
+            history.pushState(null, '', `#${pageId}`);
+
+            // Hide all sections and remove active class
+            pageSections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show the target section and add active class
+            const targetSection = document.getElementById(pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+
+                // Scroll logic: if scrollToElementId is provided, scroll to it, otherwise to top of section
+                // A small delay is crucial to allow the new section to become visible before scrolling
+                setTimeout(() => {
+                    if (scrollToElementId) {
+                        const targetElement = document.getElementById(scrollToElementId);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - mainHeader.offsetHeight - 20, // Adjusted offset
+                                behavior: 'smooth'
+                            });
+                        }
+                    } else {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - mainHeader.offsetHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 50); // Short delay
+            }
+
+            // Close mobile menu if open
+            if (mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+
+            // Update active navigation link - only for main nav items
+            navLinks.forEach(link => {
+                // Check if the link's href corresponds to a main navigation section
+                if (['#home', '#movement', '#ecosystem', '#mission', '#join-us'].includes(link.getAttribute('href'))) {
+                    link.classList.remove('text-blue-600', 'font-bold');
+                    link.classList.add('text-gray-700', 'font-medium');
+                    if (link.getAttribute('href') === `#${pageId}`) {
+                        link.classList.add('text-blue-600', 'font-bold');
+                        link.classList.remove('text-gray-700', 'font-medium');
+                    }
+                }
+            });
+        }
+
+        // Initialize homepage as active on load or navigate based on URL hash
+        document.addEventListener('DOMContentLoaded', () => {
+            updatePageSectionPadding(); // Set initial padding based on header height
+
+            const initialHash = window.location.hash.substring(1); // Remove the '#'
+            if (initialHash && document.getElementById(initialHash)) {
+                navigate(initialHash);
+            } else {
+                navigate('home');
+            }
+
+            // Listen for hash changes (e.g., browser back/forward buttons)
+            window.addEventListener('hashchange', () => {
+                const currentHash = window.location.hash.substring(1);
+                if (currentHash && document.getElementById(currentHash)) {
+                    navigate(currentHash);
+                } else {
+                    navigate('home'); // Fallback to home if hash is empty or invalid
+                }
+            });
+
+            // Re-calculate padding on window resize
+            window.addEventListener('resize', updatePageSectionPadding);
+
+            // Hamburger menu toggle
+            hamburgerMenu.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+
+
+            // FAQ Accordion functionality
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = document.getElementById(header.getAttribute('aria-controls'));
+                    const arrow = header.querySelector('.arrow');
+                    const isOpen = header.getAttribute('aria-expanded') === 'true';
+
+                    // Close all other open accordions
+                    accordionHeaders.forEach(otherHeader => {
+                        if (otherHeader !== header && otherHeader.getAttribute('aria-expanded') === 'true') {
+                            otherHeader.setAttribute('aria-expanded', 'false');
+                            const otherContent = document.getElementById(otherHeader.getAttribute('aria-controls'));
+                            const otherArrow = otherHeader.querySelector('.arrow');
+                            otherContent.classList.remove('open');
+                            otherContent.style.maxHeight = 0;
+                            otherArrow.classList.remove('rotate');
+                        }
+                    });
+
+                    // Toggle current accordion
+                    header.setAttribute('aria-expanded', !isOpen);
+                    if (isOpen) {
+                        content.classList.remove('open');
+                        content.style.maxHeight = 0;
+                        arrow.classList.remove('rotate');
+                    } else {
+                        content.classList.add('open');
+                        // Calculate scrollHeight dynamically to ensure content fits
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        arrow.classList.add('rotate');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

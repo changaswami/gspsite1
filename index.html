@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Shoe Party - Building the Alternative</title>
-    <!-- Favicon -->
     <link rel="icon" href="https://content-fetcher.sandbox.google.com/files/Favicon.png-db4198d1-fe54-4a5f-9d9e-78e3f834cb1c" type="image/png">
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
@@ -134,25 +131,22 @@
         }
         #mobile-menu.active {
             display: block; /* Shown when active */
-            max-height: 300px; /* Adjust based on actual menu height */
+            max-height: 300px; /* Increased height to ensure all items fit */
         }
     </style>
 </head>
 <body class="overflow-x-hidden">
 
-    <!-- Sticky Header -->
     <header id="main-header" class="fixed top-0 left-0 w-full z-50 bg-white shadow-md transition-all duration-300 ease-in-out py-4 px-6 md:px-12 lg:px-24">
         <nav class="flex justify-between items-center relative">
             <a href="#home" class="text-2xl font-extrabold text-blue-800 tracking-tight logo-link" onclick="navigate('home')">Global Shoe Party</a>
 
-            <!-- Hamburger menu icon for mobile -->
             <button id="hamburger-menu" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
 
-            <!-- Desktop Navigation -->
             <ul class="hidden md:flex space-x-6">
                 <li><a href="#movement" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('movement')">Our Movement</a></li>
                 <li><a href="#ecosystem" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('ecosystem')">The Ecosystem</a></li>
@@ -160,7 +154,6 @@
                 <li><a href="#join-us" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200" onclick="navigate('join-us')">Join Us</a></li>
             </ul>
 
-            <!-- Mobile Collapsible Menu -->
             <ul id="mobile-menu" class="absolute top-full left-0 w-full bg-white shadow-md py-4 md:hidden flex flex-col space-y-4 items-center">
                 <li><a href="#movement" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('movement')">Our Movement</a></li>
                 <li><a href="#ecosystem" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2" onclick="navigate('ecosystem')">The Ecosystem</a></li>
@@ -170,9 +163,7 @@
         </nav>
     </header>
 
-    <!-- Page Sections -->
     <main>
-        <!-- 1. Homepage -->
         <section id="home" class="page-section active flex-col justify-center items-center text-center px-4 py-24 relative overflow-hidden">
             <div class="relative z-10 max-w-4xl mx-auto py-12">
                 <h1 class="text-5xl md:text-7xl font-extrabold text-blue-900 leading-tight mb-6 animate-fade-in-up">
@@ -188,7 +179,6 @@
             </div>
         </section>
 
-        <!-- 2. Our Movement -->
         <section id="movement" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -199,8 +189,7 @@
                 </p>
             </div>
 
-            <div class="max-w-6xl mx-auto space-y-20"> <!-- Consolidated to single column and added spacing -->
-                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+            <div class="max-w-6xl mx-auto space-y-20"> <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
                     <h3 class="text-3xl font-bold text-blue-700 mb-4">
                         <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg>
                         The System is Broken: A Deep Dive
@@ -247,13 +236,11 @@
 
             <div class="mt-20 text-center">
                 <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <!-- Sequential Navigation Link -->
                     <a href="#ecosystem" class="btn-secondary" onclick="navigate('ecosystem')"><span class="highlighted-text">Continue to The Ecosystem</span></a>
                 </div>
             </div>
         </section>
 
-        <!-- 3. The Ecosystem -->
         <section id="ecosystem" class="page-section flex-col justify-center items-center bg-gradient-to-br from-indigo-50 to-blue-50 py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -264,7 +251,6 @@
                 </p>
             </div>
 
-            <!-- The Shoe -->
             <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
                 <h3 class="text-3xl font-bold text-blue-700 mb-4">
                     <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><polyline points="10 10 12 12 14 10"></polyline></svg>
@@ -274,7 +260,6 @@
                 <p>Utilizing on-device AI, it captures context and verifies contributions, ensuring that your tangible efforts are recognized and recorded as true value.</p>
             </div>
 
-            <!-- The Step Token -->
             <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
                 <h3 class="text-3xl font-bold text-blue-700 mb-4">
                     <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
@@ -284,7 +269,6 @@
                 <p>It's a system designed to give power to the active, the engaged, and the constructive, ensuring that influence aligns with genuine contribution, not just inherited wealth or existing power structures.</p>
             </div>
 
-            <!-- The March -->
             <div class="max-w-6xl mx-auto mb-20 space-y-6 animate-fade-in">
                 <h3 class="text-3xl font-bold text-blue-700 mb-4">
                     <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 19H7A5 5 0 0 1 2 14V10a5 5 0 0 1 5-5h10a5 5 0 0 1 5 5v4a5 5 0 0 1-5 5z"></path><circle cx="9" cy="12" r="2"></circle><circle cx="15" cy="12" r="2"></circle></svg>
@@ -294,18 +278,15 @@
                 <p>It is where we coordinate our collective will, ensuring that every citizen has a platform to contribute to global problem-solving and collective decision-making.</p>
                 </div>
 
-            <!-- Underlying Technology (Optional, Concise) -->
             <div class="mt-16 text-center max-w-3xl mx-auto">
                 <h3 class="text-2xl font-bold text-blue-700 mb-6">Underlying Technology: The Engine of Change</h3>
                 <p class="text-lg text-gray-700 mb-8">
                     Our system is powered by cutting-edge Generative AI (like Gemini) for deep contextual understanding and secure, decentralized blockchain technology (EVM-compatible Layer 2 networks) for transparent and immutable record-keeping. This blend ensures both intelligence and integrity.
                 </p>
-                <!-- Sequential Navigation Link -->
                 <a href="#mission" class="btn-primary" onclick="navigate('mission')"><span class="highlighted-text">Continue to Our Mission</span></a>
             </div>
         </section>
 
-        <!-- 4. Our Mission -->
         <section id="mission" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -316,8 +297,7 @@
                 </p>
             </div>
 
-            <div class="max-w-6xl mx-auto space-y-20"> <!-- Consolidated to single column and added spacing -->
-                <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
+            <div class="max-w-6xl mx-auto space-y-20"> <div class="space-y-8 text-lg text-gray-700 animate-fade-in">
                     <h3 class="text-3xl font-bold text-blue-700 mb-4">
                         <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.32 0z"></path><path d="M2.69 12a8 8 0 1 1 5.66-5.66"></path><path d="M12 12l-6 6l6 6l6-6z"></path></svg>
                         The Global Problem: Plastic in Our Oceans
@@ -359,7 +339,6 @@
             </div>
         </section>
 
-        <!-- 5. Join Us -->
         <section id="join-us" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -372,7 +351,6 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
                 <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                    <!-- SVG Icon for Citizen -->
                     <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -384,7 +362,6 @@
                     <a href="#get-involved-citizens" class="btn-secondary text-sm px-6 py-2" onclick="navigate('get-involved-citizens')">Get Started</a>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                    <!-- SVG Icon for Technologist -->
                     <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="16 18 22 12 16 6"></polyline>
                         <polyline points="8 6 2 12 8 18"></polyline>
@@ -394,7 +371,6 @@
                     <a href="#get-involved-technologists" class="btn-secondary text-sm px-6 py-2" onclick="navigate('get-involved-technologists')">View Open Roles</a>
                 </div>
                 <div class="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                    <!-- SVG Icon for Community Leader -->
                     <svg class="glyph-icon mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
@@ -415,7 +391,6 @@
                 </div>
             </div>
 
-            <!-- FAQ Section -->
             <div class="max-w-4xl mx-auto w-full mb-20">
                 <h3 class="text-3xl font-bold text-blue-700 text-center mb-8">Frequently Asked Questions</h3>
                 <div id="faq-accordion">
@@ -458,7 +433,6 @@
                 </div>
             </div>
 
-            <!-- Community Hub & Contact Form -->
             <div class="max-w-4xl mx-auto w-full text-center">
                 <h3 class="text-3xl font-bold text-blue-700 mb-8">Connect with Our Community</h3>
                 <div class="flex justify-center space-x-6 mb-8">
@@ -470,22 +444,21 @@
                 <form id="contact-form" action="https://formspree.io/f/xrbkadqg" method="POST" class="bg-white p-8 rounded-xl shadow-lg max-w-lg mx-auto space-y-6">
                     <div>
                         <label for="name" class="block text-left text-gray-700 font-medium mb-2">Name</label>
-                        <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Your Name">
+                        <input type="text" id="name" name="name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Your Name">
                     </div>
                     <div>
                         <label for="email" class="block text-left text-gray-700 font-medium mb-2">Email</label>
-                        <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="your.email@example.com">
+                        <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="your.email@example.com">
                     </div>
                     <div>
                         <label for="message" class="block text-left text-gray-700 font-medium mb-2">Message</label>
-                        <textarea id="message" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="How can we help you?"></textarea>
+                        <textarea id="message" name="message" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="How can we help you?"></textarea>
                     </div>
                     <button type="submit" class="btn-primary w-full">Send Message</button>
                 </form>
             </div>
         </section>
 
-        <!-- New: Get Involved - Citizens Detail Page -->
         <section id="get-involved-citizens" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -496,8 +469,7 @@
                 </p>
             </div>
 
-            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
-                <div class="space-y-8 text-lg text-gray-700">
+            <div class="max-w-6xl mx-auto space-y-8"> <div class="space-y-8 text-lg text-gray-700">
                     <h3 class="text-3xl font-bold text-blue-700 mb-4">Your Journey Starts Here</h3>
                     <p>Becoming a citizen of the Global Shoe Party means actively contributing to a better world and gaining influence in a truly decentralized system.</p>
                     <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
@@ -523,7 +495,6 @@
             </div>
         </section>
 
-        <!-- New: Get Involved - Technologists Detail Page -->
         <section id="get-involved-technologists" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -534,8 +505,7 @@
                 </p>
             </div>
 
-            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
-                <div class="space-y-8 text-lg text-gray-700">
+            <div class="max-w-6xl mx-auto space-y-8"> <div class="space-y-8 text-lg text-gray-700">
                     <h3 class="text-3xl font-bold text-blue-700 mb-4">Roles & Expertise We Seek</h3>
                     <p>If you're passionate about decentralized systems, AI, hardware, and creating tangible impact, explore the opportunities below:</p>
                     <div class="bg-blue-50 p-6 rounded-lg shadow-md space-y-4">
@@ -563,7 +533,6 @@
             </div>
         </section>
 
-        <!-- New: Get Involved - Advocates Detail Page -->
         <section id="get-involved-advocates" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24">
             <div class="max-w-5xl mx-auto text-center mb-16 py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
@@ -574,8 +543,7 @@
                 </p>
             </div>
 
-            <div class="max-w-6xl mx-auto space-y-8"> <!-- Consolidated to single column -->
-                <div class="space-y-8 text-lg text-gray-700">
+            <div class="max-w-6xl mx-auto space-y-8"> <div class="space-y-8 text-lg text-gray-700">
                     <h3 class="text-3xl font-bold text-blue-700 mb-4">Your Role in Amplifying GSP</h3>
                     <p>As an advocate or community leader, you play a direct role in educating, inspiring, and organizing individuals to become active citizens of the new digital nation.</p>
                     <div class="bg-white p-6 rounded-lg shadow-md space-y-4">
@@ -599,7 +567,6 @@
             </div>
         </section>
 
-        <!-- New Page: Privacy Policy -->
         <section id="privacy-policy" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24 text-left">
             <div class="max-w-4xl mx-auto py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8 text-center">Privacy Policy</h2>
@@ -646,7 +613,6 @@
             </div>
         </section>
 
-        <!-- New Page: Terms of Service -->
         <section id="terms-of-service" class="page-section flex-col justify-center items-center bg-gradient-to-br from-blue-50 to-indigo-100 py-20 px-6 md:px-12 lg:px-24 text-left">
             <div class="max-w-4xl mx-auto py-8">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8 text-center">Terms of Service</h2>
@@ -659,7 +625,7 @@
                 <p class="mb-6 text-gray-700">You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service. You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
 
                 <h3 class="2xl font-bold text-blue-700 mb-4">Intellectual Property</h3>
-                <p class="mb-6 text-gray-700">The Service and its original content, features and functionality are and will remain the exclusive property of Global Shoe Party and its licensors. The Service is protected by copyright, trademark, and other laws of both the India and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Global Shoe Party.</p>
+                <p class="mb-6 text-gray-700">The Service and its original content, features and functionality are and will remain the exclusive property of Global Shoe Party and its licensors. The Service is protected by copyright, trademark, and other laws of both the [Your Country] and foreign countries. Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of Global Shoe Party.</p>
 
                 <h3 class="2xl font-bold text-blue-700 mb-4">Links To Other Web Sites</h3>
                 <p class="mb-6 text-gray-700">Our Service may contain links to third-party web sites or services that are not owned or controlled by Global Shoe Party. Global Shoe Party has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that Global Shoe Party shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>
@@ -674,7 +640,7 @@
                 <p class="mb-6 text-gray-700">Global Shoe Party its subsidiaries, affiliates, and its licensors do not warrant that a) the Service will function uninterrupted, secure or available at any particular time or location; b) any errors or defects will be corrected; c) the Service is free of viruses or other harmful components; or d) the results of using the Service will meet your requirements.</p>
 
                 <h3 class="2xl font-bold text-blue-700 mb-4">Governing Law</h3>
-                <p class="mb-6 text-gray-700">These Terms shall be governed and construed in accordance with the laws of India, without regard to its conflict of law provisions.</p>
+                <p class="mb-6 text-gray-700">These Terms shall be governed and construed in accordance with the laws of [Your Country], without regard to its conflict of law provisions.</p>
                 <p class="mb-6 text-gray-700">Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>
 
                 <h3 class="2xl font-bold text-blue-700 mb-4">Changes</h3>
@@ -691,7 +657,6 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12 px-6 md:px-12 lg:px-24 text-center">
         <div class="max-w-6xl mx-auto">
             <h3 class="text-2xl font-extrabold mb-4">Global Shoe Party</h3>

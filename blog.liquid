@@ -1,0 +1,29 @@
+---
+layout: layouts/base.liquid
+permalink: /blog/
+title: Global Shoe Party Blog
+---
+<section id="blog-listing" class="page-section flex-col justify-center items-center bg-white py-20 px-6 md:px-12 lg:px-24">
+    <div class="max-w-5xl mx-auto text-center mb-16 py-8">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-blue-800 leading-tight mb-8">
+            <svg class="glyph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V6.5A2.5 2.5 0 0 0 17.5 4H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"></path></svg>
+            GSP Insights & Updates
+        </h2>
+        <p class="text-xl text-gray-700">Explore the latest news, deep dives, and thoughts from the Global Shoe Party.</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        {%- for post in collections.blog | reverse -%} {# Loop through all blog posts #}
+            <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-2xl font-bold text-blue-700 mb-2">{{ post.data.title }}</h3>
+                <p class="text-gray-600 text-sm mb-4">By {{ post.data.author }} on {{ post.data.date | date: "%B %d, %Y" }}</p>
+                <p class="text-gray-700 mb-4">{{ post.data.summary }}</p>
+                <a href="{{ post.url }}" class="text-blue-600 hover:underline font-semibold">Read More &rarr;</a>
+            </div>
+        {%- endfor -%}
+    </div>
+
+    <div class="mt-20 text-center">
+        <a href="/" class="btn-secondary">← Back to Home</a>
+    </div>
+</section>

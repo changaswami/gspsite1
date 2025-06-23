@@ -3,64 +3,41 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Global Shoe Party Content Manager</title>
-  <!-- Decap CMS stylesheet -->
-  <link href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" rel="stylesheet" />
+  <title>Global Shoe Party Admin Login</title>
+  <!-- IMPORTANT: Load Netlify Identity Widget FIRST -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- A placeholder for Netlify Identity confirmation messages -->
-  <div id="netlify-identity-confirmation-message" style="display: none; padding: 20px; background-color: #f0f0f0; border: 1px solid #ccc; text-align: center; font-family: sans-serif;">
-    If you're seeing this, you've likely just clicked a Netlify Identity invitation or password reset link. Please wait a moment while we redirect you.
-  </div>
+  <!-- A simple container for the widget if it needs to render -->
+  <div id="netlify-identity-widget-container"></div>
 
-  <!-- Decap CMS script -->
+  <!-- Decap CMS script (load after identity widget) -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <!-- Netlify Identity widget script -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
   <script>
-    // This script runs after Decap CMS and Netlify Identity widget are loaded.
-    // It helps handle the redirect flow for Netlify Identity invites.
+    // Ensure the Identity widget is initialized and processes URL tokens
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", function(user) {
-        if (!user) {
-          // If no user is logged in, show the login widget.
-          // For invite links, this should automatically open the password setup.
-          // You can customize the widget display with options here:
-          // window.netlifyIdentity.open(); // This forces the widget to open
-        } else {
-          // If a user is logged in, you could redirect or do something else.
-          // Decap CMS will handle the redirection to the admin panel by default.
-        }
-      });
-
-      // Optional: Add listeners for specific events
-      window.netlifyIdentity.on("login", function(user) {
-        console.log("Logged in:", user);
-        // After successful login, close any open widget and let Decap CMS take over
-        window.netlifyIdentity.close();
-      });
-
-      window.netlifyIdentity.on("error", function(err) {
-        console.error("Identity error:", err);
-      });
-
-      window.netlifyIdentity.on("open", function() {
-        // Widget is open
-        console.log("Identity widget opened.");
-        // You might hide the confirmation message if the widget is now visible
-        document.getElementById('netlify-identity-confirmation-message').style.display = 'none';
-      });
-
-      window.netlifyIdentity.on("close", function() {
-        // Widget is closed
-        console.log("Identity widget closed.");
-      });
-
-      // Show the confirmation message initially if a token is in the URL (from invite/reset)
-      // This helps reassure the user they're on the right path
+      // If there's an invite_token or recovery_token in the URL hash,
+      // forcibly open the widget so the user can set their password.
       if (window.location.hash && (window.location.hash.includes('invite_token=') || window.location.hash.includes('recovery_token='))) {
-        document.getElementById('netlify-identity-confirmation-message').style.display = 'block';
+        window.netlifyIdentity.open({ page: 'signup' }); // 'signup' page also handles invites/recovery
+      }
+
+      // Listen for login event to ensure smooth redirection to CMS
+      window.netlifyIdentity.on('login', function(user) {
+        console.log('User logged in:', user);
+        // After successful login, redirect to the main admin path
+        window.location.href = '/admin/';
+      });
+
+      // Listen for init event - useful for debugging, but the aggressive open() above handles the flow
+      window.netlifyIdentity.on('init', function(user) {
+        console.log('Netlify Identity initialized. User:', user);
+      });
+
+      // Decap CMS initialization: it automatically uses window.netlifyIdentity
+      // Ensure window.CMS is defined
+      if (window.CMS) {
+        window.CMS.init();
       }
     }
   </script>

@@ -1,0 +1,14 @@
+# netlify.toml
+
+# Build settings for Eleventy
+[build]
+  command = "npm run build" # Command to build your Eleventy site
+  publish = "_site"         # Directory where Eleventy outputs the final site
+
+# Essential redirect rule for Decap CMS admin
+# This ensures that requests to /admin/ and its subpaths are served correctly
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/:splat"
+  status = 200
+  force = true # Forces the redirect even if a file might exist at the base path

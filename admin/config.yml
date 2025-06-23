@@ -1,23 +1,23 @@
 # admin/config.yml
 backend:
-  name: git-gateway # Connects to your GitHub repo via Netlify
-  branch: main # Or your default branch (e.g., master)
+  name: git-gateway
+  branch: main # IMPORTANT: Make sure this matches your GitHub repo's default branch (main or master)
 
 # Enable local backend for local development (remove/comment out for production builds if causing issues)
-local_backend: true
+# local_backend: true # This can sometimes cause issues with Netlify Identity on live deploys if left enabled
 
-publish_mode: simple # Or 'editorial_workflow' if you want drafts/review process
+publish_mode: simple # Or 'editorial_workflow'
 
 media_folder: "static/uploads" # Where uploaded images will be stored (relative to project root)
-public_folder: "/static/uploads" # The URL path to the media folder on your live site
+public_folder: "/static/uploads" # The URL path to the media folder
 
 collections:
-  - name: "pages" # Collection for your main site pages
+  - name: "pages"
     label: "Site Pages"
     files:
       - label: "Homepage"
         name: "homepage"
-        file: "index.liquid" # Points to your Eleventy homepage file
+        file: "pages/index.liquid" # Path relative to Eleventy's input directory ("pages")
         fields:
           - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
           - {label: "Permalink", name: "permalink", widget: "hidden", default: "/"}
@@ -25,7 +25,7 @@ collections:
           - {label: "Subheadline", name: "subheadline", widget: "string"}
       - label: "Our Movement"
         name: "movement"
-        file: "movement.liquid"
+        file: "pages/movement.liquid"
         fields:
           - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
           - {label: "Permalink", name: "permalink", widget: "hidden", default: "/movement/"}
@@ -37,11 +37,10 @@ collections:
           - {label: "Movement Content", name: "movement_content", widget: "markdown"}
           - {label: "Principles Title", name: "principles_title", widget: "string"}
           - {label: "Principles", name: "principles", widget: "list", fields: [{label: "Title", name: "title", widget: "string"}, {label: "Description", name: "description", widget: "text"}]}
-      # You would add similar blocks for ecosystem.liquid, mission.liquid, join-us.liquid, etc.
-      # For example, for ecosystem.liquid:
+      # Add other pages here (Ecosystem, Mission, Join Us, Privacy, Terms) following the same pattern
       - label: "The Ecosystem"
         name: "ecosystem"
-        file: "ecosystem.liquid"
+        file: "pages/ecosystem.liquid"
         fields:
           - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
           - {label: "Permalink", name: "permalink", widget: "hidden", default: "/ecosystem/"}
@@ -55,17 +54,68 @@ collections:
           - {label: "March Content", name: "march_content", widget: "markdown"}
           - {label: "Tech Title", name: "tech_title", widget: "string"}
           - {label: "Tech Content", name: "tech_content", widget: "markdown"}
+      - label: "Our Mission"
+        name: "mission"
+        file: "pages/mission.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/mission/"}
+          - {label: "Main Title", name: "main_title", widget: "string"}
+          - {label: "Main Description", name: "main_description", widget: "string"}
+          - {label: "Problem Title", name: "problem_title", widget: "string"}
+          - {label: "Problem Content", name: "problem_content", widget: "markdown"}
+          - {label: "Coordinated Effort Title", name: "coordinated_effort_title", widget: "string"}
+          - {label: "Coordinated Effort Content", name: "coordinated_effort_content", widget: "markdown"}
+          - {label: "Measuring Success Title", name: "measuring_success_title", widget: "string"}
+          - {label: "Metrics", name: "metrics", widget: "list", fields: [{label: "Title", name: "title", widget: "string"}, {label: "Description", name: "description", widget: "text"}]}
+      - label: "Join Us"
+        name: "join-us"
+        file: "pages/join-us.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/join-us/"}
+          - {label: "Main Title", name: "main_title", widget: "string"}
+          - {label: "Main Description", name: "main_description", widget: "string"}
+          - {label: "Citizen Section Title", name: "citizen_section_title", widget: "string"}
+          - {label: "Citizen Section Content", name: "citizen_section_content", widget: "markdown"}
+          - {label: "Technologist Section Title", name: "technologist_section_title", widget: "string"}
+          - {label: "Technologist Section Content", name: "technologist_section_content", widget: "markdown"}
+          - {label: "Advocates Section Title", name: "advocates_section_title", widget: "string"}
+          - {label: "Advocates Section Content", name: "advocates_section_content", widget: "markdown"}
+          - {label: "FAQ Title", name: "faq_title", widget: "string"}
+          - {label: "FAQs", name: "faqs", widget: "list", fields: [{label: "Question", name: "question", widget: "string"}, {label: "Answer", name: "answer", widget: "text"}]}
+          - {label: "Connect Title", name: "connect_title", widget: "string"}
+          - {label: "Connect Description", name: "connect_description", widget: "text"}
+      - label: "Privacy Policy"
+        name: "privacy-policy"
+        file: "pages/privacy-policy.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/privacy-policy/"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Last Updated", name: "last_updated", widget: "string"}
+          - {label: "Main Content", name: "body", widget: "markdown"}
+      - label: "Terms of Service"
+        name: "terms-of-service"
+        file: "pages/terms-of-service.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/terms-of-service/"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Last Updated", name: "last_updated", widget: "string"}
+          - {label: "Main Content", name: "body", widget: "markdown"}
 
-  - name: "blog" # A new collection for your blog posts
-    label: "Blog Posts"
-    folder: "blog" # Posts will be stored in a 'blog' folder
-    create: true # Allow users to create new posts
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # URL structure for posts (e.g., 2025-06-25-my-post)
-    fields:
-      - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"} # Posts use the main layout
-      - {label: "Permalink", name: "permalink", widget: "hidden", default: "/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"} # Define how blog post URLs are structured
-      - {label: "Title", name: "title", widget: "string", required: true}
-      - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD"}
-      - {label: "Author", name: "author", widget: "string", default: "GSP Team"}
-      - {label: "Summary", name: "summary", widget: "text"}
-      - {label: "Body", name: "body", widget: "markdown"} # Main content of the blog post, using Markdown
+
+      - name: "blog"
+        label: "Blog Posts"
+        folder: "blog"
+        create: true
+       slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"}
+          - {label: "Title", name: "title", widget: "string", required: true}
+          - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD"}
+          - {label: "Author", name: "author", widget: "string", default: "GSP Team"}
+          - {label: "Summary", name: "summary", widget: "text"}
+          - {label: "Body", name: "body", widget: "markdown"}

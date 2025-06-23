@@ -1,0 +1,71 @@
+# admin/config.yml
+backend:
+  name: git-gateway # Connects to your GitHub repo via Netlify
+  branch: main # Or your default branch (e.g., master)
+
+# Enable local backend for local development (remove/comment out for production builds if causing issues)
+local_backend: true
+
+publish_mode: simple # Or 'editorial_workflow' if you want drafts/review process
+
+media_folder: "static/uploads" # Where uploaded images will be stored (relative to project root)
+public_folder: "/static/uploads" # The URL path to the media folder on your live site
+
+collections:
+  - name: "pages" # Collection for your main site pages
+    label: "Site Pages"
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        file: "index.liquid" # Points to your Eleventy homepage file
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/"}
+          - {label: "Headline", name: "headline", widget: "string"}
+          - {label: "Subheadline", name: "subheadline", widget: "string"}
+      - label: "Our Movement"
+        name: "movement"
+        file: "movement.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/movement/"}
+          - {label: "Main Title", name: "main_title", widget: "string"}
+          - {label: "Main Description", name: "main_description", widget: "string"}
+          - {label: "Broken System Title", name: "broken_system_title", widget: "string"}
+          - {label: "Broken System Content", name: "broken_system_content", widget: "markdown"}
+          - {label: "Movement Title", name: "movement_title", widget: "string"}
+          - {label: "Movement Content", name: "movement_content", widget: "markdown"}
+          - {label: "Principles Title", name: "principles_title", widget: "string"}
+          - {label: "Principles", name: "principles", widget: "list", fields: [{label: "Title", name: "title", widget: "string"}, {label: "Description", name: "description", widget: "text"}]}
+      # You would add similar blocks for ecosystem.liquid, mission.liquid, join-us.liquid, etc.
+      # For example, for ecosystem.liquid:
+      - label: "The Ecosystem"
+        name: "ecosystem"
+        file: "ecosystem.liquid"
+        fields:
+          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/ecosystem/"}
+          - {label: "Main Title", name: "main_title", widget: "string"}
+          - {label: "Main Description", name: "main_description", widget: "string"}
+          - {label: "Shoe Title", name: "shoe_title", widget: "string"}
+          - {label: "Shoe Content", name: "shoe_content", widget: "markdown"}
+          - {label: "Token Title", name: "token_title", widget: "string"}
+          - {label: "Token Content", name: "token_content", widget: "markdown"}
+          - {label: "March Title", name: "march_title", widget: "string"}
+          - {label: "March Content", name: "march_content", widget: "markdown"}
+          - {label: "Tech Title", name: "tech_title", widget: "string"}
+          - {label: "Tech Content", name: "tech_content", widget: "markdown"}
+
+  - name: "blog" # A new collection for your blog posts
+    label: "Blog Posts"
+    folder: "blog" # Posts will be stored in a 'blog' folder
+    create: true # Allow users to create new posts
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # URL structure for posts (e.g., 2025-06-25-my-post)
+    fields:
+      - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"} # Posts use the main layout
+      - {label: "Permalink", name: "permalink", widget: "hidden", default: "/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"} # Define how blog post URLs are structured
+      - {label: "Title", name: "title", widget: "string", required: true}
+      - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD"}
+      - {label: "Author", name: "author", widget: "string", default: "GSP Team"}
+      - {label: "Summary", name: "summary", widget: "text"}
+      - {label: "Body", name: "body", widget: "markdown"} # Main content of the blog post, using Markdown

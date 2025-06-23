@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Shoe Party - Building the Alternative</title>
+    <!-- Favicon -->
+    <link rel="icon" href="/Favicon.png" type="image/png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Your existing CSS styles go here */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        html { scroll-behavior: smooth; }
+        .page-section {
+            display: flex; /* Always display as flex for consistent layout */
+            opacity: 1; /* Always opaque */
+            min-height: 100vh;
+            padding-top: 8rem;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        /* No need for .page-section.active as Eleventy handles routing now */
+
+        .btn-primary { @apply bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 ease-in-out hover:bg-blue-700 hover:shadow-xl transform hover:scale-105; }
+        .btn-secondary { @apply bg-transparent border-2 border-blue-600 text-blue-600 font-semibold py-3 px-8 rounded-full transition-all duration-300 ease-in-out hover:bg-blue-600 hover:text-white transform hover:scale-105; }
+        #main-header { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        *:focus { outline: 2px solid #3182ce; outline-offset: 2px; }
+        .glyph-icon { width: 28px; height: 28px; display: inline-block; vertical-align: middle; margin-right: 8px; color: #4299e1; }
+        .accordion-item { border: 1px solid #e2e8f0; border-radius: 0.75rem; margin-bottom: 1rem; overflow: hidden; background-color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .accordion-header { @apply flex justify-between items-center w-full py-4 px-6 text-left font-semibold text-xl cursor-pointer hover:text-blue-600 transition-colors duration-200; }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; @apply px-6 pb-4 text-gray-700; }
+        .accordion-content.open { max-height: 500px; }
+        .arrow { transition: transform 0.3s ease-out; }
+        .arrow.rotate { transform: rotate(180deg); }
+        @keyframes hero-gradient-move { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        #home { background: linear-gradient(135deg, #e0f2fe, #bfdbfe, #c7d2fe); background-size: 200% 200%; animation: hero-gradient-move 15s ease infinite; }
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .highlighted-text { @apply text-blue-600 font-semibold hover:underline; }
+        #mobile-menu { display: none; transition: max-height 0.3s ease-in-out; overflow: hidden; max-height: 0; }
+        #mobile-menu.active { display: block; max-height: 300px; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 bg-white shadow-md transition-all duration-300 ease-in-out py-4 px-6 md:px-12 lg:px-24">
+        <nav class="flex justify-between items-center relative">
+            <a href="/" class="text-2xl font-extrabold text-blue-800 tracking-tight logo-link">Global Shoe Party</a>
+
+            <button id="hamburger-menu" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="/movement/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Our Movement</a></li>
+                <li><a href="/ecosystem/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">The Ecosystem</a></li>
+                <li><a href="/mission/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Our Mission</a></li>
+                <li><a href="/join-us/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Join Us</a></li>
+            </ul>
+
+            <ul id="mobile-menu" class="absolute top-full left-0 w-full bg-white shadow-md py-4 md:hidden flex flex-col space-y-4 items-center">
+                <li><a href="/movement/" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2">Our Movement</a></li>
+                <li><a href="/ecosystem/" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2">The Ecosystem</a></li>
+                <li><a href="/mission/" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2">Our Mission</a></li>
+                <li><a href="/join-us/" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 w-full text-center py-2">Join Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {{ content }}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6 md:px-12 lg:px-24 text-center">
+        <div class="max-w-6xl mx-auto">
+            <h3 class="text-2xl font-extrabold mb-4">Global Shoe Party</h3>
+            <p class="text-gray-400 mb-6">Email: <a href="mailto:mail@globalshoeparty.org" class="text-blue-400 hover:underline">mail@globalshoeparty.org</a></p>
+            <p class="text-gray-400 mb-6">&copy; 2025 Global Shoe Party. All rights reserved. Building the alternative.</p>
+            <div class="flex justify-center space-x-6 text-gray-400">
+                <a href="/privacy-policy/" class="hover:text-white transition-colors duration-200">Privacy Policy</a>
+                <a href="/terms-of-service/" class="hover:text-white transition-colors duration-200">Terms of Service</a>
+                <a href="/join-us/#contact-form" class="hover:text-white transition-colors duration-200">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        var mainHeader = document.getElementById('main-header');
+        var hamburgerMenu = document.getElementById('hamburger-menu');
+        var mobileMenu = document.getElementById('mobile-menu');
+
+        // Handle mobile menu toggle
+        if (hamburgerMenu) {
+            hamburgerMenu.addEventListener('click', function() {
+                mobileMenu.classList.toggle('active');
+            });
+        }
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+        // FAQ Accordion functionality (now only runs if element exists on current page)
+        var accordionHeaders = document.querySelectorAll('.accordion-header');
+        if (accordionHeaders.length > 0) { // Check if FAQs are on this page
+            accordionHeaders.forEach(function(header) {
+                header.addEventListener('click', function() {
+                    var content = document.getElementById(header.getAttribute('aria-controls'));
+                    var arrow = header.querySelector('.arrow');
+                    var isOpen = header.getAttribute('aria-expanded') === 'true';
+
+                    accordionHeaders.forEach(function(otherHeader) {
+                        if (otherHeader !== header && otherHeader.getAttribute('aria-expanded') === 'true') {
+                            otherHeader.setAttribute('aria-expanded', 'false');
+                            var otherContent = document.getElementById(otherHeader.getAttribute('aria-controls'));
+                            var otherArrow = otherHeader.querySelector('.arrow');
+                            otherContent.classList.remove('open');
+                            otherContent.style.maxHeight = 0;
+                            otherArrow.classList.remove('rotate');
+                        }
+                    });
+
+                    header.setAttribute('aria-expanded', !isOpen);
+                    if (isOpen) {
+                        content.classList.remove('open');
+                        content.style.maxHeight = 0;
+                        arrow.classList.remove('rotate');
+                    } else {
+                        content.classList.add('open');
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        arrow.classList.add('rotate');
+                    }
+                });
+            });
+        }
+
+        // Client-side scroll handling for #contact-form link from footer
+        // This is needed because Eleventy links are full page reloads, and direct anchor links don't smoothly scroll to fixed headers
+        document.querySelectorAll('footer a[href^="/join-us/#contact-form"]').forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Manually navigate to the join-us page first
+                window.location.href = '/join-us/';
+
+                setTimeout(function() {
+                    var targetElement = document.getElementById('contact-form');
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - mainHeader.offsetHeight - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100); // Small delay to allow page content to render
+            });
+        });
+
+        // Set up padding for page sections on load and resize
+        window.addEventListener('DOMContentLoaded', function() {
+            var pageSections = document.querySelectorAll('.page-section');
+            var headerHeight = mainHeader.offsetHeight;
+            pageSections.forEach(function(section) {
+                section.style.paddingTop = (headerHeight + 32) + 'px';
+            });
+        });
+
+        window.addEventListener('resize', function() {
+            var pageSections = document.querySelectorAll('.page-section');
+            var headerHeight = mainHeader.offsetHeight;
+            pageSections.forEach(function(section) {
+                section.style.paddingTop = (headerHeight + 32) + 'px';
+            });
+        });
+    </script>
+</body>
+</html>

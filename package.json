@@ -22,5 +22,9 @@
   "homepage": "https://github.com/changaswami/gspsite1#readme",
   "dependencies": {
     "@11ty/eleventy": "^3.1.1"
+  },
+  "devDependencies": {
+    "contentful": "^11.7.3",
+    "dotenv": "^16.5.0"
   }
 }

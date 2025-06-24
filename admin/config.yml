@@ -14,9 +14,9 @@ media_folder: "static/uploads" # Where uploaded images will be stored (relative 
 public_folder: "/static/uploads" # The URL path to the media folder
 
 collections:
-  - name: "pages"
-    label: "Site Pages"
-    files:
+      - name: "pages"
+        label: "Site Pages"
+        files:
       - label: "Homepage"
         name: "homepage"
         file: "pages/index.liquid" # Path relative to Eleventy's input directory ("pages")

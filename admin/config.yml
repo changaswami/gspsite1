@@ -1,8 +1,8 @@
 # admin/config.yml
 backend:
   name: auth0
-  auth0_url: "YOUR_AUTH0_DOMAIN_HERE"
-  app_id: "YOUR_AUTH0_CLIENT_ID_HERE"
+  auth0_url: "dev-v4h0v1u1ezh0ca5u.us.auth0.com"
+  app_id: "g6xNaVBZUj55tIBjIumTayN1JtRgf0Yy"
 
 # publish_mode: simple # Can keep this or remove it, no impact on current error
 

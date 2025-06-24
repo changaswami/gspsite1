@@ -1,25 +1,22 @@
 # admin/config.yml
 backend:
-  name: auth0 # Use Auth0 for authentication
-  auth0_url: "dev-v4h0v1u1ezh0ca5u.us.auth0.com" # e.g., "dev-xyz123.us.auth0.com"
-  app_id: "g6xNaVBZUj55tIBjIumTayN1JtRgf0Yy" # Your Auth0 Client ID
+  name: auth0
+  auth0_url: "YOUR_AUTH0_DOMAIN_HERE"
+  app_id: "YOUR_AUTH0_CLIENT_ID_HERE"
 
-# Important: local_backend: true will NOT work with Auth0 authentication locally.
-# It causes conflicts. Make sure this line is REMOVED or commented out.
-# local_backend: true
+# publish_mode: simple # Can keep this or remove it, no impact on current error
 
-publish_mode: simple # Or 'editorial_workflow'
+media_folder: "static/uploads"
+public_folder: "/static/uploads"
 
-media_folder: "static/uploads" # Where uploaded images will be stored (relative to project root)
-public_folder: "/static/uploads" # The URL path to the media folder
 
 collections:
-      - name: "pages"
-        label: "Site Pages"
-        files:
+  - name: "pages" # Line 17, column 5 starts here. This MUST be indented correctly.
+    label: "Site Pages"
+    files:
       - label: "Homepage"
         name: "homepage"
-        file: "pages/index.liquid" # Path relative to Eleventy's input directory ("pages")
+        file: "pages/index.liquid"
         fields:
           - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
           - {label: "Permalink", name: "permalink", widget: "hidden", default: "/"}
@@ -39,7 +36,6 @@ collections:
           - {label: "Movement Content", name: "movement_content", widget: "markdown"}
           - {label: "Principles Title", name: "principles_title", widget: "string"}
           - {label: "Principles", name: "principles", widget: "list", fields: [{label: "Title", name: "title", widget: "string"}, {label: "Description", name: "description", widget: "text"}]}
-      # Add other pages here (Ecosystem, Mission, Join Us, Privacy, Terms) following the same pattern
       - label: "The Ecosystem"
         name: "ecosystem"
         file: "pages/ecosystem.liquid"
@@ -107,17 +103,16 @@ collections:
           - {label: "Last Updated", name: "last_updated", widget: "string"}
           - {label: "Main Content", name: "body", widget: "markdown"}
 
-
-      - name: "blog"
-        label: "Blog Posts"
-        folder: "blog"
-        create: true
-       slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-        fields:
-          - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
-          - {label: "Permalink", name: "permalink", widget: "hidden", default: "/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"}
-          - {label: "Title", name: "title", widget: "string", required: true}
-          - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD"}
-          - {label: "Author", name: "author", widget: "string", default: "GSP Team"}
-          - {label: "Summary", name: "summary", widget: "text"}
-          - {label: "Body", name: "body", widget: "markdown"}
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Layout", name: "layout", widget: "hidden", default: "layouts/base.liquid"}
+      - {label: "Permalink", name: "permalink", widget: "hidden", default: "/blog/{{year}}/{{month}}/{{day}}/{{slug}}/"}
+      - {label: "Title", name: "title", widget: "string", required: true}
+      - {label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD"}
+      - {label: "Author", name: "author", widget: "string", default: "GSP Team"}
+      - {label: "Summary", name: "summary", widget: "text"}
+      - {label: "Body", name: "body", widget: "markdown"}

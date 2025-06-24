@@ -4,7 +4,7 @@ backend:
   auth0_url: "dev-v4h0v1u1ezh0ca5u.us.auth0.com"
   app_id: "g6xNaVBZUj55tIBjIumTayN1JtRgf0Yy"
 
-# publish_mode: simple # Can keep this or remove it, no impact on current error
+publish_mode: simple # Can keep this or remove it, no impact on current error
 
 media_folder: "static/uploads"
 public_folder: "/static/uploads"

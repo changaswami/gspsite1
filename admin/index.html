@@ -5,14 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Global Shoe Party Content Manager</title>
   <link href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" rel="stylesheet" />
+
+  <!-- NEW: Meta tags to pass environment variables -->
+  <meta name="AUTH0_DOMAIN" content="%AUTH0_DOMAIN%">
+  <meta name="AUTH0_CLIENT_ID" content="%AUTH0_CLIENT_ID%">
+
 </head>
 <body>
   <!-- Decap CMS script -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <script src="https://unpkg.com/@decapcms/auth0@^3.0.0/dist/decap-cms-auth0.js"></script>
+
   <script>
+    // NEW: Read values from meta tags (Netlify automatically replaces %ENV_VAR% during build)
+    // Fallback to empty string if not found, though they should be
+    var auth0Domain = document.querySelector('meta[name="AUTH0_DOMAIN"]').content || '';
+    var auth0ClientId = document.querySelector('meta[name="AUTH0_CLIENT_ID"]').content || '';
+
     // Decap CMS initialization
-    CMS.init();
+    // Overwrite CMS config backend if meta tags are present
+    if (auth0Domain && auth0ClientId) {
+        CMS.init({
+            config: {
+                backend: {
+                    name: 'auth0',
+                    auth0_url: auth0Domain,
+                    app_id: auth0ClientId,
+                },
+                // ... other config.yml properties if needed directly in JS
+            }
+        });
+    } else {
+        // Fallback for when meta tags are not present (e.g., local dev without Netlify build)
+        // Or if CMS.init() is automatically picking up config.yml
+        CMS.init();
+    }
   </script>
 </body>
 </html>

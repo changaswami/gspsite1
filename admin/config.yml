@@ -1,8 +1,8 @@
 # admin/config.yml
 backend:
   name: auth0
-  auth0_url: "dev-v4h0v1u1ezh0ca5u.us.auth0.com"
-  app_id: "g6xNaVBZUj55tIBjIumTayN1JtRgf0Yy"
+  auth0_url: "process.env.AUTH0_DOMAIN" # This will be replaced by Netlify ENV var
+  app_id: "process.env.AUTH0_CLIENT_ID" # This will be replaced by Netlify ENV var
 
 publish_mode: simple # Can keep this or remove it, no impact on current error
 

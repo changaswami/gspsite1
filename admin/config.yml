@@ -1,10 +1,12 @@
 # admin/config.yml
 backend:
-  name: git-gateway
-  branch: main # IMPORTANT: Make sure this matches your GitHub repo's default branch (main or master)
+  name: auth0 # Use Auth0 for authentication
+  auth0_url: "dev-v4h0v1u1ezh0ca5u.us.auth0.com" # e.g., "dev-xyz123.us.auth0.com"
+  app_id: "g6xNaVBZUj55tIBjIumTayN1JtRgf0Yy" # Your Auth0 Client ID
 
-# Enable local backend for local development (remove/comment out for production builds if causing issues)
-# local_backend: true # This can sometimes cause issues with Netlify Identity on live deploys if left enabled
+# Important: local_backend: true will NOT work with Auth0 authentication locally.
+# It causes conflicts. Make sure this line is REMOVED or commented out.
+# local_backend: true
 
 publish_mode: simple # Or 'editorial_workflow'
 

@@ -3,72 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Global Shoe Party Admin Login</title>
-  <!-- Decap CMS stylesheet (still here for potential future use) -->
+  <title>Global Shoe Party Content Manager</title>
   <link href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" rel="stylesheet" />
 </head>
 <body>
-  <!-- A message to show while loading/redirecting -->
-  <div id="loading-message" style="padding: 20px; background-color: #f0f0f0; border: 1px solid #ccc; text-align: center; font-family: sans-serif;">
-    Loading admin interface... If you're here from an invite, the setup window should appear shortly.
-  </div>
-
-  <!-- Netlify Identity widget script -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
+  <!-- Decap CMS script -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // Check if the Identity widget is available
-    if (window.netlifyIdentity) {
-      console.log('Netlify Identity widget script loaded.');
-
-      // Initialize the widget. This is important for it to detect tokens in the URL.
-      window.netlifyIdentity.init();
-
-      // Listen for the 'init' event which fires once the widget is ready
-      window.netlifyIdentity.on('init', function(user) {
-        console.log('Netlify Identity initialized. User:', user);
-        document.getElementById('loading-message').style.display = 'none'; // Hide loading message
-
-        // If an invite/recovery token is present in the URL hash,
-        // forcibly open the widget to allow password setup.
-        if (window.location.hash.includes('invite_token=') || window.location.hash.includes('recovery_token=')) {
-          console.log('Invite or recovery token detected. Opening widget...');
-          window.netlifyIdentity.open({ page: 'signup' }); // 'signup' page handles both invites/recovery
-        } else if (!user) {
-          // If no user logged in and no token, show login widget (optional, Decap CMS might handle this)
-          // window.netlifyIdentity.open(); // You can uncomment this to force it open if still having issues
-        }
-      });
-
-      // Listen for the 'login' event to ensure redirection to CMS
-      window.netlifyIdentity.on('login', function(user) {
-        console.log('User logged in:', user);
-        // Close the widget and then redirect to the main admin path
-        window.netlifyIdentity.close();
-        window.location.href = '/admin/'; // Ensure a clean redirect to the CMS
-      });
-
-      // Listen for errors
-      window.netlifyIdentity.on('error', function(err) {
-        console.error('Netlify Identity error:', err);
-        document.getElementById('loading-message').textContent = 'Error during login. Check console.';
-      });
-
-      // Listen for logout
-      window.netlifyIdentity.on('logout', function() {
-        console.log('User logged out.');
-      });
-
-    } else {
-      console.error('Netlify Identity widget not loaded!');
-      document.getElementById('loading-message').textContent = 'Error: Identity widget failed to load. Check console for details.';
-    }
-
-    // Decap CMS initialization: It will automatically use window.netlifyIdentity if available.
-    // It's crucial this runs *after* netlifyIdentity.js is loaded and initialized.
-    if (window.CMS) {
-      window.CMS.init();
-    }
+    // Decap CMS initialization
+    CMS.init();
   </script>
 </body>
 </html>
